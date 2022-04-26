@@ -7,7 +7,7 @@ import logo from '../../images/logo.png'
 
 const NavbarItem = ({ title, classProps }) => {
     return (
-        <li className={`mx-4 cursor-pointer %{classProps}`}>
+        <li className={`mx-4 cursor-pointer ${classProps}`}>
             {title}
         </li>
     )
@@ -15,7 +15,7 @@ const NavbarItem = ({ title, classProps }) => {
 
 const Navbar = () => {
     const [toggleMenu, setToggleMenu] = React.useState(false);
-    const animationProps = useSpring({ to: { opacity: 1 }, from: { opacity: 0 } });
+    const animationProps = useSpring({ to: { opacity: toggleMenu ? 1 : 0, transform: toggleMenu ? 'translateY(0%)' : 'translateY(-100%)' }});
 
     return (
         <nav className="w-full flex md:justify-center justify-between items-center p-4">
@@ -36,14 +36,13 @@ const Navbar = () => {
                 : <HiMenuAlt4 fontSize={28} className="text-white md:hidden cursor-pointer" onClick={() => setToggleMenu(true)} /> }
                 {toggleMenu && (
                     /* This will only show when toggleMenu is true, also the - in front of "right" means minus */
-                    /* TODO Sort out animations using React Spring or an alternative method */
-                    <animated.ul style={animationProps} className="z-index fixed top-0 -right-2 p-3 w-[70vw] h-screen shadow-2xl md:hidden list-none flex flex-col justify-start items-end rounded-md blue-glassmorphism text-white">
+                    <animated.ul style={animationProps} className="z-index fixed top-0 -right-0 pl-0 w-[100vw] h-screen shadow-2xl md:hidden list-none flex flex-col justify-start items-center rounded-md blue-glassmorphism text-white">
                         <li className="text-xl w-full my-2">
                             <AiOutlineClose onClick={() => setToggleMenu(false)} />
                         </li>
-                        {["Market", "Exchange", "Tutorials", "Wallets"].map((item, index) => (
-                            <NavbarItem key={item + index} title={item} classProps="my-2 text-lg" />
-                        ))}
+                        {["Market", "Exchange", "Tutorials", "Wallets"].map((item, index) => {
+                            return <NavbarItem key={item + index} title={item} classProps="my-2 text-4xl" />
+                        })}
                     </animated.ul>
                 )}
             </div>
