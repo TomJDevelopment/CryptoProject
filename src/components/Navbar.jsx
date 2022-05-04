@@ -1,6 +1,9 @@
 import React from "react";
 import { HiMenuAlt4 } from 'react-icons/hi'
 import { AiOutlineClose } from 'react-icons/ai'
+import { AiFillLinkedin } from "react-icons/ai";
+import { AiFillTwitterSquare } from "react-icons/ai";
+
 import { useSpring, animated } from 'react-spring'
 
 import logo from '../../images/logo.png'
@@ -18,7 +21,7 @@ const Navbar = () => {
     const animationProps = useSpring({ to: { opacity: toggleMenu ? 1 : 0, transform: toggleMenu ? 'translateY(0%)' : 'translateY(-100%)' }});
 
     return (
-        <nav className="w-full flex md:justify-center justify-between items-center p-4">
+        <nav className="w-full flex md:justify-center justify-between items-center p-4 font-sans">
             <div className="md:flex-[0.5] justify-center items-center">
                 <img src={logo} alt="Krypt Logo" className="w-32 cursor-pointer" />
             </div>
@@ -36,13 +39,17 @@ const Navbar = () => {
                 : <HiMenuAlt4 fontSize={28} className="text-white md:hidden cursor-pointer" onClick={() => setToggleMenu(true)} /> }
                 {toggleMenu && (
                     /* This will only show when toggleMenu is true, also the - in front of "right" means minus */
-                    <animated.ul style={animationProps} className="z-index fixed top-0 -right-0 pl-0 w-[100vw] h-screen shadow-2xl md:hidden list-none flex flex-col justify-start items-center rounded-md blue-glassmorphism text-white">
+                    <animated.ul style={animationProps} className="z-10 fixed top-0 -right-0 pl-0 w-[100vw] h-screen shadow-2xl md:hidden list-none flex flex-col justify-start items-center rounded-md blue-glassmorphism text-white">
                         <li className="text-xl w-full my-2">
-                            <AiOutlineClose onClick={() => setToggleMenu(false)} />
+                            <AiOutlineClose className="cursor-pointer" onClick={() => setToggleMenu(false)} />
                         </li>
                         {["Market", "Exchange", "Tutorials", "Wallets"].map((item, index) => {
                             return <NavbarItem key={item + index} title={item} classProps="my-2 text-4xl" />
                         })}
+                        <div className="w-full flex justify-center items-center">
+                            <a href="https://www.linkedin.com" target="_blank"><AiFillLinkedin className="cursor-pointer text-4xl mx-1 text-linkedin-blue rounded-2xl" /></a>
+                            <a href="https://www.twitter.com" target="_blank"><AiFillTwitterSquare className="cursor-pointer text-4xl mx-1 text-twitter-blue rounded-2xl" /></a>
+                        </div>
                     </animated.ul>
                 )}
             </div>
