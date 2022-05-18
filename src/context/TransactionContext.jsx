@@ -18,8 +18,10 @@ export const TransactionProvider = ({ children }) => { // This wraps around the 
     const [connectedAccount, setConnectedAccount] = useState("");
     const [formData, setFormData] = useState({ addressTo: "", amount: "", keyword: "", message: "" });
 
-    const handleChange = (e, name) => { // TODO For some reason it is updating just the latest edited input field, look at functional state
-        setFormData(prevState => ({prevState, [name]: e.target.value})); // prevState is something React provides for the previous state of an object
+    const handleChange = (e, name) => {
+        setFormData(prevState => ({
+            ...prevState, [name]: e.target.value // the '...' is important here as useState does not "spread" the property, so it'll remove all but the one you're trying to update at that time - in essence it allows us to copy all the existing array into a new one
+        }));
     }
 
     const checkIfWalletIsConnected = async () => {
@@ -43,8 +45,7 @@ export const TransactionProvider = ({ children }) => { // This wraps around the 
         try {
             if(!ethereum) return alert("Please install MetaMask");
             const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-
-            // setCurrentAccount(accounts[0]);
+            setConnectedAccount(accounts[0]);
         } catch (error) {
             console.log(error);
 
@@ -55,7 +56,6 @@ export const TransactionProvider = ({ children }) => { // This wraps around the 
     const sendTransaction = async () => {
         try {
             if(!ethereum) return alert("Please install MetaMask");
-            console.log("Hello world");
             const { addressTo, amount, keyword, message } = formData;
             getEthereumContract();
         } catch (error) {
@@ -63,8 +63,8 @@ export const TransactionProvider = ({ children }) => { // This wraps around the 
         }
     }
 
-    useEffect(() => {
-        checkIfWalletIsConnected();
+    useEffect(async () => {
+        await checkIfWalletIsConnected();
     }, [])
 
     return (

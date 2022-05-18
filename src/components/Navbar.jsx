@@ -39,7 +39,7 @@ const Navbar = () => {
                 : <HiMenuAlt4 fontSize={28} className="text-white md:hidden cursor-pointer" onClick={() => setToggleMenu(true)} /> }
                 {toggleMenu && (
                     /* This will only show when toggleMenu is true, also the - in front of "right" means minus */
-                    <animated.ul style={animationProps} className="z-10 fixed top-0 -right-0 pl-0 w-[100vw] h-screen shadow-2xl md:hidden list-none flex flex-col justify-start items-center rounded-md blue-glassmorphism text-white">
+                    <animated.ul style={animationProps} className="z-10 fixed top-0 -right-0 pl-0 w-[100vw] h-screen md:hidden list-none flex flex-col justify-start items-center blue-glassmorphism text-white">
                         <li className="text-xl w-full my-2">
                             <AiOutlineClose className="cursor-pointer" onClick={() => setToggleMenu(false)} />
                         </li>
