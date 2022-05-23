@@ -1,6 +1,6 @@
 import React, {createContext, useEffect, useState} from "react";
-import {ethers} from "ethers";
-import {contractABI, contractAddress} from "../utils/constants";
+import { ethers } from "ethers";
+import { contractABI, contractAddress } from "../utils/constants";
 
 export const TransactionContext = createContext("");
 
@@ -72,6 +72,12 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
             const { addressTo, amount, keyword, message } = formData;
             const transactionContract = getEthereumContract();
             const parsedAmount = ethers.utils.parseEther(amount); // Calculates the ethereum into the GWEI hexadecimal amount
+
+            let encoder = ethers.utils.defaultAbiCoder;
+            if(!encoder) {
+                displayErrorModal("Error occurred", "An error occurred, please try again");
+                return;
+            }
 
             await ethereum.request({
                 method: "eth_sendTransaction",

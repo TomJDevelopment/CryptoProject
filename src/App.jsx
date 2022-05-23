@@ -1,5 +1,5 @@
 import './styles/styles.css'
-import { Navbar, Loader, Footer, Services, Transaction, Welcome } from './components/index'
+import { Navbar, Footer, Services, Transaction, Welcome } from './components/index'
 
 const App = () => {
   return (
@@ -9,7 +9,10 @@ const App = () => {
         <Welcome />
       </div>
       <Services />
-      <Transaction />
+        <div className="flex w-full gradient-bg-transactions overflow-y-hidden overflow-x-auto">
+            <Transaction Message="Hello World" Image="seo" />
+            <Transaction Message="Hello World" Image="spongebob" />
+        </div>
       <Footer />
     </div>
   )
