@@ -15,17 +15,16 @@ const getEthereumContract = () => {
 const getTransactionCount = async () => {
     const transactionContract = getEthereumContract();
     const transactionCount = await transactionContract.getTransactionCount();
-    console.log(transactionCount.toNumber());
 }
 
 export const TransactionProvider = ({ children }) => { // The TransactionProvider wraps around everything in main.jsx, so the whole application can access this context
     const [connectedAccount, setConnectedAccount] = useState("");
     const [formData, setFormData] = useState({ addressTo: "", amount: "", keyword: "", message: "" });
     const [isLoading, setIsLoading] = useState(false);
-    const [transactionCount, setTransactionCount] = useState(getTransactionCount());
     const [errorOccurred, setErrorOccurred] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [errorTitle, setErrorTitle] = useState("");
+    const [previousTransactions, setPreviousTransactions] = useState([]);
 
     const handleChange = (e, name) => {
         setFormData(prevState => ({
@@ -40,8 +39,7 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
 
             if(accounts.length) {
                 setConnectedAccount(accounts[0]);
-
-                // get all transactions
+                await getAllTransactions();
             } else {
                 displayErrorModal("Please connect MetaMask", "Please connect MetaMask to the application");
             }
@@ -50,11 +48,31 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
         }
     }
 
+    const getAllTransactions = async () => {
+        try {
+            const transactionContract = getEthereumContract();
+            const transactions = await transactionContract.getAllTransactions();
+            const structuredTransaction = transactions.map((transaction) => ({
+                AddressFrom: transaction.AddressFrom,
+                AddressTo: transaction.AddressTo,
+                Amount: parseInt(transaction.Amount._hex) / (10 ** 18),
+                Message: transaction.Message,
+                Keyword: transaction.Keyword,
+                Timestamp: new Date(transaction.Timestamp.toNumber() * 1000).toLocaleString()
+            }));
+
+            setPreviousTransactions(structuredTransaction);
+        } catch (error) {
+            throw new Error(`An error occurred ${error.message}`);
+        }
+    }
+
     const connectWallet = async () => {
         try {
             if(!ethereum) return alert("Please install MetaMask");
             const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
             setConnectedAccount(accounts[0]);
+            await getAllTransactions();
         } catch (error) {
             console.log(error);
 
@@ -112,7 +130,7 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
     }, [])
 
     return (
-        <TransactionContext.Provider value={{ connectWallet, connectedAccount, formData, handleChange, sendTransaction, isLoading, transactionCount }}>
+        <TransactionContext.Provider value={{ connectWallet, connectedAccount, formData, handleChange, sendTransaction, isLoading, previousTransactions }}>
             { children }
         </TransactionContext.Provider>
     )

@@ -4,6 +4,7 @@ import { SiEthereum } from "react-icons/all";
 import { BsInfoCircle } from "react-icons/all";
 
 import { Loader } from "./";
+import { shortenAddress } from "../utils/shortenAddress";
 import { TransactionContext } from "../context/TransactionContext";
 
 const commonStyles = 'min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-white'
@@ -41,7 +42,7 @@ const ErrorModal = ({ title, message }) => (
 )
 
 const Welcome = () => {
-    const { connectWallet, connectedAccount, formData, handleChange, sendTransaction, isLoading, transactionCount } = useContext(TransactionContext);
+    const { connectWallet, connectedAccount, formData, handleChange, sendTransaction, isLoading } = useContext(TransactionContext);
 
     const handleSubmit = (e) => {
         const { addressTo, amount, keyword, message } = formData;
@@ -91,7 +92,7 @@ const Welcome = () => {
                             </div>
                             <div>
                                 {!connectedAccount ? (<p className="text-white font-light font-sans sm:subpixel-antialiased">Address</p>)
-                                    : (<p className="text-white font-light font-sans sm:subpixel-antialiased">{connectedAccount}</p>)}
+                                    : (<p className="text-white font-light font-sans sm:subpixel-antialiased">{shortenAddress(connectedAccount)}</p>)}
                                 <p className="text-white font-semibold text-lg font-sans sm:subpixel-antialiased">Etheruem</p>
                             </div>
                         </div>
