@@ -1,5 +1,5 @@
 import './styles/styles.css'
-import { Navbar, Footer, Services, Transaction, Welcome } from './components/index'
+import { Navbar, Footer, Transaction, Welcome } from './components/index'
 
 const App = () => {
   return (
@@ -8,10 +8,13 @@ const App = () => {
         <Navbar />
         <Welcome />
       </div>
-      <Services />
-        <div className="flex w-full gradient-bg-transactions overflow-y-hidden overflow-x-auto">
-            <Transaction Message="Hello World" Image="seo" />
-            <Transaction Message="Hello World" Image="spongebob" />
+        <div className="w-full gradient-bg-transactions">
+            <h1 className="text-3xl sm:text-5xl pb-3 text-white text-gradient py-1 md:subpixel-antialiased text-center">Latest Transactions</h1>
+            <div className="flex w-full overflow-y-hidden overflow-x-auto">
+                <Transaction Message="Hello World" Image="seo" />
+                {/*<Transaction Message="Hello World" Image="spongebob" />*/}
+                {/*<Transaction Message="Hello World" Image="patrick" />*/}
+            </div>
         </div>
       <Footer />
     </div>
