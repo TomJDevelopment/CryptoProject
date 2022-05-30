@@ -18,8 +18,8 @@ const App = () => {
             <div className="flex flex-nowrap overflow-y-hidden overflow-x-visible scrollbar">
                 {connectedAccount ? previousTransactions ? previousTransactions.slice(0, 25).reverse().map((transaction, i) => (
                     <Transaction AddressFrom={transaction.AddressFrom} AddressTo={transaction.AddressTo} Keyword={transaction.Keyword} Message={transaction.Message} Amount={transaction.Amount} key={i} />
-                )) : <p className="text-xl sm:text-2xl text-white col-span-full justify-self-center">No Transactions Available</p>
-                    : <p className="text-xl sm:text-2xl text-white col-span-full justify-self-center">Please connect your MetaMask to see previous transactions</p>}
+                )) : <div className="flex w-full justify-center"><p className="text-xl sm:text-2xl text-white">No Transactions Available</p></div>
+            : <div className="flex w-full justify-center"><p className="text-xl sm:text-2xl text-white">Please connect your MetaMask to see previous transactions</p></div>}
             </div>
         </div>
       <Footer />

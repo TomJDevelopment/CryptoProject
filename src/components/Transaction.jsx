@@ -28,7 +28,9 @@ const Transaction = ({ AddressFrom, AddressTo, Keyword, Message, Amount }) => {
             </div>
             <p className="pl-3 text-white font-semibold text-left">Sent &mdash; {Amount} Ethereum</p>
             <p className="pl-3 pb-2 text-white font-semibold text-left">Saying &mdash; {Message}</p>
-            <button type="button" className="rounded-bl-2xl rounded-br-2xl justify-self-end text-white font-sans font-semibold w-full border-[1px] p-2 border-[#3d4f7c] cursor-pointer hover:bg-blue-600 transition-colors duration-300">View</button>
+            <button className="no-underline rounded-bl-2xl rounded-br-2xl justify-self-end text-white font-sans font-semibold w-full border-[1px] p-2 border-[#3d4f7c] cursor-pointer hover:bg-blue-600 transition-colors duration-300" onClick={() => {
+                window.open(`https://ropsten.etherscan.io/address/${AddressFrom}`, "_blank");
+            }}>View</button>
         </div>
     )
 }
