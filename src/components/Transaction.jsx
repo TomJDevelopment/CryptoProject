@@ -1,24 +1,11 @@
-import {useEffect, useState, useContext} from "react";
+import {useEffect, useState} from "react";
 
-import { TransactionContext } from "../context/TransactionContext";
 import { shortenAddress } from "../utils/shortenAddress";
 
-const TransactionCard = ({ AddressTo, AddressFrom, Message, Keyword, Timestamp, Amount }) => {
-    return ( // Too many transactions because we have created the loop inside the transaction.jsx file, it needs to be in the App.jsx class passing the properties into the Transaction.jsx
-        <div className="flex items-center bg-gray-700 w-full h-full">
-            <div className="flex">
-                <p className="text-xl text-white font-semibold left-0">From: {shortenAddress(AddressFrom)}</p>
-                <p className="text-xl text-white font-semibold left-0">To: {shortenAddress(AddressTo)}</p>
-            </div>
-        </div>
-    )
-}
-
-const Transaction = ({ Message, Image }) => {
+const Transaction = ({ AddressFrom, AddressTo, Keyword, Message, Amount }) => {
     const [url, setUrl] = useState("");
-    const { previousTransactions, connectedAccount } = useContext(TransactionContext);
-    const GifImage = async (Image) => {
-        await fetch(`https://api.giphy.com/v1/gifs/search?api_key=xAgR7JgQrnaWahVoPCS27Z0raasw8i0l&q=${Image}&limit=1&offset=0&rating=g&lang=en`)
+    const GifImage = async (Keyword) => {
+        await fetch(`https://api.giphy.com/v1/gifs/search?api_key=xAgR7JgQrnaWahVoPCS27Z0raasw8i0l&q=${Keyword}&limit=1&offset=0&rating=g&lang=en`)
             .then(result => result.json())
             .then((result) => {
                 const {data: [{images: {original: {url}}}]} = result;
@@ -29,14 +16,18 @@ const Transaction = ({ Message, Image }) => {
     }
 
     useEffect(async () => {
-       await GifImage(Image);
+       await GifImage(Keyword);
     });
 
     return (
-        <div className="grid grid-cols-3">
-            {connectedAccount ? previousTransactions.reverse().map((transaction, i) => (
-                <TransactionCard {...transaction} key={i} />
-            )) : <p className="text-xl sm:text-2xl text-white">Please connect your MetaMask to see previous transactions</p>}
+        <div className="bg-gray-700 rounded-2xl">
+            <img className="rounded-tl-2xl rounded-tr-2xl w-full h-4/5" alt="GIF" src={url} />
+            <div className="grid grid-cols-2">
+                <p className="pl-3 pt-2 text-white font-semibold text-left">From: {shortenAddress(AddressFrom)}</p>
+                <p className="pr-3 pt-2 text-white font-semibold text-right">To: {shortenAddress(AddressTo)}</p>
+            </div>
+            <p className="pl-3 pb-2 text-white font-semibold text-left">Message: {Message}</p>
+            <button type="button" className="rounded-tl-2xl rounded-tr-2xl text-white font-sans font-semibold w-full border-[1px] p-2 border-[#3d4f7c] rounded-full cursor-pointer hover:bg-blue-600 transition-colors duration-300">View</button>
         </div>
     )
 }
