@@ -6,6 +6,7 @@ import { BsInfoCircle } from "react-icons/all";
 import { Loader } from "./";
 import { shortenAddress } from "../utils/shortenAddress";
 import { TransactionContext } from "../context/TransactionContext";
+import { ErrorModal } from "./Error";
 
 const commonStyles = 'min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-white'
 
@@ -22,24 +23,6 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
          onChange={e => handleChange(e, name)}
          className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm font-sans white-glassmorphism" />
 );
-
-const ErrorModal = ({ title, message }) => (
-    <div id="errorModal" tabIndex="-1" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            <div className="flex justify-between items-center">
-                {/* -- Header -- */}
-                <h1 className="font-semibold text-1xl sm:text-2xl subpixel-antialiased">{title}</h1>
-            </div>
-            <div className="flex justify-between items-start">
-                {/* -- Body -- */}
-                <p className="text-white text-lg subpixel-antialiased">{message}</p>
-            </div>
-            <div className="flex justify-between items-end bottom-0">
-                <button className="flex flex-row justify-center items-center bg-[#2952e3] p-1 rounded-full cursor-pointer hover:bg-[#2546bd] transition-colors duration-300 text-white text-base font-semibold">Close</button>
-            </div>
-        </div>
-    </div>
-)
 
 const Welcome = () => {
     const { connectWallet, connectedAccount, formData, handleChange, sendTransaction, isLoading } = useContext(TransactionContext);

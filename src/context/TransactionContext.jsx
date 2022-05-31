@@ -34,7 +34,11 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
 
     const checkIfWalletIsConnected = async () => {
         try {
-            if(!ethereum) return alert("Please install MetaMask");
+            if(!ethereum) {
+                displayErrorModal("MetaMask", "Please install MetaMask");
+                return;
+            }
+
             const accounts = await ethereum.request({ method: 'eth_accounts' });
 
             if(accounts.length) {
@@ -44,7 +48,7 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
                 displayErrorModal("Please connect MetaMask", "Please connect MetaMask to the application");
             }
         } catch (error) {
-            throw new Error("No ethereum object");
+            displayErrorModal("Error Occurred", "An error occurred while checking if your wallet is connected");
         }
     }
 
@@ -115,6 +119,7 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
             const transactionCount = await transactionContract.getTransactionCount();
             setTransactionCount(transactionCount.toNumber());
         } catch (error) {
+            displayErrorModal("Error Occurred", "An error occurred while trying to send this transaction");
             throw new Error(`Error ${error.message} occurred`);
         }
     }
@@ -127,10 +132,11 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
 
     useEffect(async () => {
         await checkIfWalletIsConnected();
+        displayErrorModal("test", "testing");
     }, [])
 
     return (
-        <TransactionContext.Provider value={{ connectWallet, connectedAccount, formData, handleChange, sendTransaction, isLoading, previousTransactions }}>
+        <TransactionContext.Provider value={{ connectWallet, connectedAccount, formData, handleChange, sendTransaction, isLoading, previousTransactions, errorOccurred, errorTitle, errorMessage, setErrorOccurred }}>
             { children }
         </TransactionContext.Provider>
     )

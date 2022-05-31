@@ -3,12 +3,14 @@ import { useContext } from "react";
 import { Navbar, Footer, Transaction, Welcome } from './components/index'
 
 import { TransactionContext } from "./context/TransactionContext";
+import { ErrorModal } from "./components/Error";
 
 const App = () => {
-    const { previousTransactions, connectedAccount } = useContext(TransactionContext);
+    const { previousTransactions, connectedAccount, errorOccurred, errorTitle, errorMessage } = useContext(TransactionContext);
 
   return (
     <div className="min-h-screen">
+        {errorOccurred ? ( <ErrorModal title={errorTitle} message={errorMessage} /> ) : null}
       <div className="gradient-bg-welcome">
         <Navbar />
         <Welcome />
