@@ -2,12 +2,9 @@ import { useContext } from "react";
 import { SiEthereum } from "react-icons/all";
 import { BsInfoCircle } from "react-icons/all";
 
-import { Loader } from "./";
 import { shortenAddress } from "../utils/shortenAddress";
 import { TransactionContext } from "../context/TransactionContext";
 import { Toastr } from "./Toastr";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const commonStyles = 'min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-white'
 
@@ -29,18 +26,11 @@ const Welcome = () => {
         e.preventDefault();
 
         if(!addressTo || !amount || !keyword || !message) {
-            Toastr({ToastId: 1, Message: "Please fill in all fields", Error: true});
+            await Toastr({ ToastId: 1, Message: "Please fill in all fields", Error: true });
             return;
         }
 
-        await toast.promise(
-            sendTransaction(),
-            {
-                pending: "Loading...",
-                success: "Successful",
-                error: "An error occurred"
-            }
-        )
+        await Toastr({ ToastId: 2, PromiseMethod: sendTransaction, LoadingPromise: true });
     }
 
     return (
@@ -96,7 +86,7 @@ const Welcome = () => {
                         <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />
                         <div className="h-[1px] w-full bg-gray-400 my-2" />
                         {isLoading ? (
-                           <Loader />
+                            <button type="button" className="text-gray-600 disabled:opacity-50 font-sans font-semibold w-full mt-2 border-[1px] p-2 border-[#3d4f7c] rounded-full cursor-default">Send</button>
                         ) : (
                             <button type="button"
                                     onClick={handleSubmit}

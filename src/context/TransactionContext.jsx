@@ -1,6 +1,7 @@
 import React, {createContext, useEffect, useState} from "react";
 import { ethers } from "ethers";
 import { contractABI, contractAddress } from "../utils/constants";
+import { Toastr } from "../components/Toastr";
 
 export const TransactionContext = createContext("");
 
@@ -33,7 +34,7 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
     const checkIfWalletIsConnected = async () => {
         try {
             if(!ethereum) {
-                console.log("Place error here")
+                await Toastr({ ToastId: 1, Error: true, Message: "Please install MetaMask" });
                 return;
             }
 
@@ -44,10 +45,10 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
                 await getAllTransactions();
                 await getTransactionCount();
             } else {
-                console.log("Place error here");
+                await Toastr({ ToastId: 1, Error: true, Message: "Please connect MetaMask" });
             }
         } catch (error) {
-            console.log("Place error here");
+            await Toastr({ ToastId: 1, Error: true, Message: "Error occurred", IconString: "💀" });
         }
     }
 
@@ -66,18 +67,23 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
 
             setPreviousTransactions(structuredTransaction);
         } catch (error) {
+            await Toastr({ ToastId: 1, Error: true, Message: "Error occurred", IconString: "💀" });
             throw new Error(`An error occurred ${error.message}`);
         }
     }
 
     const connectWallet = async () => {
         try {
-            if(!ethereum) return alert("Please install MetaMask");
+            if(!ethereum) {
+                await Toastr({ ToastId: 1, Error: true, Message: "Please install MetaMask" });
+            }
+
             const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
             setConnectedAccount(accounts[0]);
             await getAllTransactions();
             await getTransactionCount();
         } catch (error) {
+            await Toastr({ ToastId: 1, Error: true, Message: "No Ethereum object" });
             throw new Error("No ethereum object");
         }
     }
@@ -85,7 +91,7 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
     const sendTransaction = async () => {
         try {
             if(!ethereum) {
-                console.log("Place error here")
+                await Toastr({ ToastId: 1, Error: true, Message: "No Ethereum object" });
                 return;
             }
 
@@ -117,7 +123,7 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
             setTransactionCount(transactionCount.toNumber());
             return true;
         } catch (error) {
-            console.log("Place error here");
+            await Toastr({ ToastId: 1, Error: true, Message: "Error occurred", IconString: "💀" });
             return false;
         }
     }

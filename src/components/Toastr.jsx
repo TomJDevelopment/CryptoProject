@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export const Toastr = ({ ToastId, Message, Error, Loading, IconString, Theme}) => {
+export const Toastr = async ({ ToastId, Message, Error, LoadingPromise, IconString, Theme, PromiseMethod }) => {
     if(Error) {
         if(IconString) {
             if(Theme) {
@@ -28,7 +28,14 @@ export const Toastr = ({ ToastId, Message, Error, Loading, IconString, Theme}) =
                 toastId: ToastId
             });
         }
-    } else if(Loading) {
-
+    } else if(LoadingPromise) {
+        await toast.promise(
+            PromiseMethod(),
+            {
+                pending: "Sending...",
+                success: "Successfully sent",
+                error: "An error occurred"
+            }
+        )
     }
 }
