@@ -95,6 +95,7 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
                 return;
             }
 
+            setIsLoading(true);
             const { addressTo, amount, keyword, message } = formData;
             const transactionContract = getEthereumContract();
             const parsedAmount = ethers.utils.parseEther(amount); // Calculates the ethereum into the GWEI hexadecimal amount
@@ -115,7 +116,6 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
             });
 
             const transactionHash = await transactionContract.addToBlockchain(addressTo, parsedAmount, message, keyword);
-            setIsLoading(true);
             await transactionHash.wait();
             setIsLoading(false);
 
@@ -124,6 +124,7 @@ export const TransactionProvider = ({ children }) => { // The TransactionProvide
             return true;
         } catch (error) {
             await Toastr({ ToastId: 1, Error: true, Message: "Error occurred", IconString: "💀" });
+            setIsLoading(false);
             return false;
         }
     }

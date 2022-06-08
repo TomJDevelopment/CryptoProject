@@ -30,6 +30,7 @@ const Welcome = () => {
             return;
         }
 
+
         await Toastr({ ToastId: 2, PromiseMethod: sendTransaction, LoadingPromise: true });
     }
 
