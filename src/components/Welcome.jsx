@@ -1,18 +1,15 @@
 import { useContext } from "react";
-import { AiFillPlayCircle } from "react-icons/all";
 import { SiEthereum } from "react-icons/all";
 import { BsInfoCircle } from "react-icons/all";
 
 import { Loader } from "./";
 import { shortenAddress } from "../utils/shortenAddress";
 import { TransactionContext } from "../context/TransactionContext";
-import { ErrorModal } from "./Error";
+import { Toastr } from "./Toastr";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const commonStyles = 'min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-white'
-
-const handleSubmit = () => {
-
-}
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input placeholder={placeholder}
@@ -27,12 +24,23 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 const Welcome = () => {
     const { connectWallet, connectedAccount, formData, handleChange, sendTransaction, isLoading } = useContext(TransactionContext);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         const { addressTo, amount, keyword, message } = formData;
         e.preventDefault();
 
-        if(!addressTo || !amount || !keyword || !message) return;
-        sendTransaction();
+        if(!addressTo || !amount || !keyword || !message) {
+            Toastr({ToastId: 1, Message: "Please fill in all fields", Error: true});
+            return;
+        }
+
+        await toast.promise(
+            sendTransaction(),
+            {
+                pending: "Loading...",
+                success: "Successful",
+                error: "An error occurred"
+            }
+        )
     }
 
     return (
@@ -76,7 +84,7 @@ const Welcome = () => {
                             <div>
                                 {!connectedAccount ? (<p className="text-white font-light font-sans sm:subpixel-antialiased">Address</p>)
                                     : (<p className="text-white font-light font-sans sm:subpixel-antialiased">{shortenAddress(connectedAccount)}</p>)}
-                                <p className="text-white font-semibold text-lg font-sans sm:subpixel-antialiased">Etheruem</p>
+                                <p className="text-white font-semibold text-lg font-sans sm:subpixel-antialiased">Ethereum</p>
                             </div>
                         </div>
                     </div>
